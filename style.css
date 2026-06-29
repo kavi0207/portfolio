@@ -81,7 +81,7 @@ section { padding: 64px 0; }
 }
 
 /* ---- domain overview tiles ---- */
-.domains { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 30px; }
+.domains { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 30px; }
 .domain {
   display: block; border: 1px solid var(--line); border-radius: 12px; padding: 18px 18px 16px;
   background: #fff; box-shadow: var(--shadow); color: var(--ink);

@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Security Data Engineer — Portfolio</title>
-<meta name="description" content="Security data engineer building production pipelines across threat intelligence, vulnerability management, post-quantum cryptographic posture, and the security of AI systems — with pragmatic, auditable LLM enrichment." />
+<meta name="description" content="Security data engineer building production pipelines across cyber threat intelligence, vulnerability management, and posture management (cryptographic / PQC and AI agents) — with pragmatic, auditable LLM enrichment." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -18,8 +18,7 @@
     <span class="links">
       <a href="#cti">Threat Intel</a>
       <a href="#vm">Vuln Mgmt</a>
-      <a href="#cpm">Crypto</a>
-      <a href="#aisec">AI Security</a>
+      <a href="#posture">Posture Mgmt</a>
       <a class="contact" href="#contact">Contact</a>
     </span>
   </div>
@@ -31,7 +30,7 @@
     <h1>I turn raw security data into decisions.</h1>
     <p class="lead">
       I design and ship production data systems across <strong>cyber threat intelligence</strong>,
-      <strong>vulnerability management</strong>, and <strong>post-quantum cryptographic posture</strong> —
+      <strong>vulnerability management</strong>, and <strong>posture management</strong> —
       pairing classic data engineering with pragmatic, auditable LLM enrichment.
     </p>
     <div class="cta">
@@ -40,10 +39,10 @@
     </div>
     <p class="trust">
       <strong>12+ years</strong> in data &amp; AI · ex-<strong>SecurityScorecard</strong>, Deloitte ·
-      <strong>~280K</strong> CVEs scored daily · <strong>8</strong> production security-data systems
+      <strong>~280K</strong> CVEs scored daily · production systems across three security domains
     </p>
 
-    <!-- domain overview: the four buckets, up front -->
+    <!-- domain overview: the three buckets, up front -->
     <div class="domains">
       <a class="domain" href="#cti">
         <span class="n">01</span>
@@ -57,17 +56,11 @@
         <p>Threat-informed risk scoring &amp; patch prioritization.</p>
         <span class="count">1 project →</span>
       </a>
-      <a class="domain" href="#cpm">
+      <a class="domain" href="#posture">
         <span class="n">03</span>
-        <h4>Cryptographic Posture</h4>
-        <p>Outside-in PQC discovery &amp; sector readiness benchmarks.</p>
-        <span class="count">2 projects →</span>
-      </a>
-      <a class="domain" href="#aisec">
-        <span class="n">04</span>
-        <h4>Security of AI</h4>
-        <p>Agent / MCP telemetry, detection &amp; behavioral baselines.</p>
-        <span class="count">2 projects · in progress →</span>
+        <h4>Posture Management</h4>
+        <p>Cryptographic (PQC) &amp; AI-agent (AI-SPM) security posture.</p>
+        <span class="count">3 projects →</span>
       </a>
     </div>
   </div>
@@ -118,7 +111,7 @@
           <span class="kicker">Dark-Web Monitoring</span>
           <h3>Watching the Dark Web at Scale</h3>
           <p class="usecase">“Are my company’s credentials leaking on the dark web?”</p>
-          <p>Queries a darknet-intelligence API, collapses thousands of noisy matches into canonical findings, uses Gemini for role-aware false-positive filtering, and fires real-time alerts via Pub/Sub.</p>
+          <p>Queries a darknet-intelligence API, collapses thousands of noisy matches into canonical findings, uses Gemini for role-aware false-positive filtering, and surfaces real-time exposure alerts via Pub/Sub.</p>
           <span class="card-stat">~80% false positives filtered by LLM</span>
           <div class="chips">
             <span class="chip">Dagster</span><span class="chip">dlt</span><span class="chip">Gemini</span>
@@ -141,7 +134,7 @@
           <span class="kicker">Quantum / PQC Threat Intel</span>
           <h3>Quantum Security Threat Intelligence</h3>
           <p class="usecase">“What is the real quantum threat — today vs. future?”</p>
-          <p>A sourced threat register separating <em>future</em> cryptanalytic risk (Shor/Grover) from the <em>live</em> migration-era attack surface (PQC side-channels, downgrade attacks, harvest-now-decrypt-later) — capability-framed, never fear-sold. Published as analyst briefings for Quelea.</p>
+          <p>A sourced threat register separating <em>future</em> cryptanalytic risk (Shor/Grover) from the <em>live</em> migration-era attack surface (PQC side-channels, downgrade attacks, harvest-now-decrypt-later) — capability-framed, never fear-sold. Published as analyst briefings.</p>
           <span class="card-stat">Capability-over-attribution register</span>
           <div class="chips">
             <span class="chip">Threat Intelligence</span><span class="chip">Post-Quantum</span>
@@ -195,16 +188,17 @@
   </div>
 </section>
 
-<!-- ============ BUCKET 3 — CPM / PQC ============ -->
-<section id="cpm" class="domain-section">
+<!-- ============ BUCKET 3 — POSTURE MANAGEMENT (PQC + AI-SPM) ============ -->
+<section id="posture" class="domain-section">
   <div class="wrap">
     <div class="cat">
-      <span class="cat-label">03 · Attack Surface &amp; Cryptographic Posture</span>
-      <h2 class="cat-title">Finding the exposure others can’t see</h2>
-      <p class="cat-desc">Quelea: discovering an organization’s cryptographic posture from the outside, then turning it into sector-wide PQC-readiness intelligence — discovery → analysis → benchmark, end to end.</p>
+      <span class="cat-label">03 · Posture Management</span>
+      <h2 class="cat-title">Knowing your exposure before anyone attacks it</h2>
+      <p class="cat-desc">One repeatable loop — discover → assess → score → track — applied across domains. Today: <strong>cryptographic posture (PQC / CPM)</strong>. Next: <strong>AI-agent posture (AI-SPM)</strong> — the log source incumbent tools don’t yet cover.</p>
     </div>
     <div class="grid">
 
+      <!-- Cryptographic posture: scanner -->
       <article class="tile">
         <div class="pipe">
           <span class="stage">Scan</span><span class="arrow">→</span>
@@ -213,7 +207,7 @@
           <span class="stage">Posture map</span>
         </div>
         <div class="tile-body">
-          <span class="kicker">Crypto Posture Mgmt · ASM</span>
+          <span class="kicker">Cryptographic Posture · PQC</span>
           <h3>External PQC Discovery &amp; Posture Maps</h3>
           <p class="usecase">“What cryptography is this org exposing — and is it PQC-ready?”</p>
           <p>A Rust scanner (core / discovery / DNS / PQC crates) that fingerprints an organization’s externally-observable cryptography, builds a CBOM-style posture, and renders cross-org posture maps showing concentration and crypto-agility gaps.</p>
@@ -228,6 +222,7 @@
         </div>
       </article>
 
+      <!-- Cryptographic posture: sector benchmarks -->
       <article class="tile">
         <div class="pipe">
           <span class="stage">Scan sector</span><span class="arrow">→</span>
@@ -236,7 +231,7 @@
           <span class="stage">Report</span>
         </div>
         <div class="tile-body">
-          <span class="kicker">PQC Readiness · Sector Benchmarks</span>
+          <span class="kicker">Cryptographic Posture · PQC</span>
           <h3>Sector PQC-Readiness Reports</h3>
           <p class="usecase">“How does a whole sector stand on the migration clock?”</p>
           <p>Automated, repeatable readiness benchmarks across sectors (banking, insurance, payments, public) and countries — scanning large organization populations, scoring posture, and generating publication-grade reports with cross-org comparison.</p>
@@ -251,57 +246,23 @@
         </div>
       </article>
 
-    </div>
-  </div>
-</section>
-
-<!-- ============ BUCKET 4 — SECURITY OF AI ============ -->
-<section id="aisec" class="domain-section alt">
-  <div class="wrap">
-    <div class="cat">
-      <span class="cat-label">04 · Security of AI</span>
-      <h2 class="cat-title">Securing the AI workforce <span class="badge">In progress</span></h2>
-      <p class="cat-desc">The next track: applying the same security-data discipline to autonomous AI agents — the log source incumbent tools don’t yet cover. Designs complete; builds underway.</p>
-    </div>
-    <div class="grid">
-
+      <!-- AI posture: AI-SPM -->
       <article class="tile">
         <div class="pipe">
-          <span class="stage">Attack logs</span><span class="arrow">→</span>
-          <span class="stage">Cribl</span><span class="arrow">→</span>
-          <span class="stage">Sentinel · ASIM</span><span class="arrow">→</span>
-          <span class="stage">Detections</span>
+          <span class="stage">Instrument agent</span><span class="arrow">→</span>
+          <span class="stage">Inventory · AI-BOM</span><span class="arrow">→</span>
+          <span class="stage">Assess access</span><span class="arrow">→</span>
+          <span class="stage">Baseline</span>
         </div>
         <div class="tile-body">
-          <span class="kicker">Detection Engineering · SIEM</span>
-          <h3>Honeypot → SIEM Detection Pipeline</h3>
-          <p class="usecase">“Authentic attack telemetry → ATT&amp;CK-mapped detections-as-code.”</p>
-          <p>End-to-end: attack logs → Cribl (route/reduce/normalize) → Microsoft Sentinel → ASIM normalization → detection-as-code (KQL, CI/CD, each rule mapped to a MITRE ATT&amp;CK technique), provisioned with Terraform.</p>
-          <span class="card-stat">Cribl · Sentinel/KQL · detection-as-code</span>
+          <span class="kicker">AI Security Posture · AI-SPM <span class="badge">In progress</span></span>
+          <h3>AI-Agent Visibility &amp; Posture</h3>
+          <p class="usecase">“Which AI agents do we run, who owns them, and what can they reach?”</p>
+          <p>Instrument MCP-exposed agents with OpenTelemetry GenAI, build an agent inventory and ownership graph, generate an AI-BOM, assess over-permissioned access, and establish representation-learning behavioral baselines for posture drift — the agent-visibility layer incumbent tools miss.</p>
+          <span class="card-stat">The agent-posture layer vendors are missing</span>
           <div class="chips">
-            <span class="chip">Cribl</span><span class="chip">Sentinel · KQL</span><span class="chip">ASIM</span>
-            <span class="chip">Terraform</span><span class="chip">MITRE ATT&amp;CK</span>
-          </div>
-          <div class="card-links"><span class="pdf">Write-up coming</span></div>
-        </div>
-      </article>
-
-      <article class="tile">
-        <div class="pipe">
-          <span class="stage">Agent telemetry</span><span class="arrow">→</span>
-          <span class="stage">OTel GenAI</span><span class="arrow">→</span>
-          <span class="stage">Detect</span><span class="arrow">→</span>
-          <span class="stage">Baselines</span>
-        </div>
-        <div class="tile-body">
-          <span class="kicker">AI Security · Agent Telemetry</span>
-          <h3>Agent / MCP Telemetry → Detection</h3>
-          <p class="usecase">“What did your AI agents do yesterday — and was it normal?”</p>
-          <p>Instrument an MCP-exposed agent with OpenTelemetry GenAI, stream tool-call and token telemetry into the same platform, and detect agentic threats — anomalous tool use, token-spike exfiltration, prompt injection — mapped to OWASP Agentic Top 10 &amp; MITRE ATLAS, plus representation-learning behavioral baselines.</p>
-          <span class="card-stat">The agent-visibility layer vendors are missing</span>
-          <div class="chips">
-            <span class="chip">OpenTelemetry GenAI</span><span class="chip">MCP</span><span class="chip">MITRE ATLAS</span>
-            <span class="chip">Representation learning</span><span class="chip">AI-BOM</span>
+            <span class="chip">OpenTelemetry GenAI</span><span class="chip">MCP</span><span class="chip">AI-BOM</span>
+            <span class="chip">Neo4j ownership graph</span><span class="chip">MITRE ATLAS</span>
           </div>
           <div class="card-links"><span class="pdf">Write-up coming</span></div>
         </div>
@@ -315,7 +276,7 @@
   <div class="wrap">
     <div class="section-head">
       <h2>What I work with</h2>
-      <p>The stack behind these systems — across CTI, vulnerability management, cryptographic posture (PQC), and AI security.</p>
+      <p>The stack behind these systems — across threat intelligence, vulnerability management, and posture management.</p>
     </div>
     <div class="skill-grid">
       <div>
@@ -330,7 +291,7 @@
       <div>
         <h4>Data &amp; Storage</h4>
         <ul>
-          <li>PostgreSQL · pgvector</li>
+          <li>PostgreSQL · pgvector · Neo4j</li>
           <li>BigQuery · DuckDB</li>
           <li>SQLAlchemy 2.0 (async)</li>
           <li>OCSF normalization</li>
@@ -350,8 +311,8 @@
         <ul>
           <li>Python 3.12 · Rust</li>
           <li>Docker · gRPC · GCP</li>
-          <li>MITRE ATT&amp;CK · NVD/EPSS/KEV</li>
-          <li>PQC · CBOM · crypto-agility</li>
+          <li>NVD/EPSS/KEV · MITRE ATT&amp;CK</li>
+          <li>PQC · CBOM · AI-BOM</li>
         </ul>
       </div>
     </div>
@@ -361,7 +322,7 @@
 <footer id="contact">
   <div class="wrap">
     <h2>Let’s talk</h2>
-    <p>Open to security data engineering, threat intelligence, and AI-security roles.</p>
+    <p>Open to security data engineering, threat intelligence, and posture-management roles.</p>
     <div class="cta" style="justify-content:center;">
       <a class="btn primary" href="https://github.com/kavi0207" target="_blank" rel="noopener">GitHub</a>
       <a class="btn" href="https://www.linkedin.com/" target="_blank" rel="noopener">LinkedIn</a>
