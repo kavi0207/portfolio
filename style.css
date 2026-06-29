@@ -110,28 +110,38 @@ section { padding: 64px 0; }
   padding: 3px 9px; border-radius: 999px; vertical-align: middle; margin-left: 8px;
 }
 
-/* ---- uniform project tiles (inside a bucket) ---- */
-.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+/* ---- filter bar ---- */
+.filter-bar { display: flex; gap: 10px; flex-wrap: wrap; margin: 0 0 14px; }
+.filter-btn {
+  padding: 8px 16px; border: 1px solid var(--line); border-radius: 999px; background: #fff;
+  font-family: inherit; font-weight: 600; font-size: 14px; color: var(--ink-soft); cursor: pointer; transition: .15s;
+}
+.filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+.filter-btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+#filter-desc { color: var(--ink-soft); font-size: 16px; margin: 0 0 30px; }
+
+/* ---- full-width project rows ---- */
+.grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
 .tile {
-  display: flex; flex-direction: column; overflow: hidden;
+  display: flex; flex-direction: row; align-items: stretch; overflow: hidden;
   border: 1px solid var(--line); border-radius: var(--radius);
   background: #fff; box-shadow: var(--shadow); transition: .15s;
 }
-.tile:hover { transform: translateY(-3px); box-shadow: 0 2px 6px rgba(15,23,42,.06), 0 16px 40px rgba(15,23,42,.10); }
+.tile:hover { transform: translateY(-2px); box-shadow: 0 2px 6px rgba(15,23,42,.06), 0 16px 40px rgba(15,23,42,.10); }
 
-/* visual entry point: a "pipeline strip" showing the architecture at a glance */
+/* visual entry point: the pipeline as a left rail, stages stacked top to bottom */
 .pipe {
-  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-  padding: 18px 22px; background: linear-gradient(135deg, #eef2ff 0%, #f8fafc 100%);
-  border-bottom: 1px solid var(--line);
+  display: flex; flex-direction: column; align-items: flex-start; gap: 6px;
+  flex: 0 0 220px; padding: 24px 22px; background: linear-gradient(160deg, #eef2ff 0%, #f8fafc 100%);
+  border-right: 1px solid var(--line);
 }
 .pipe .stage {
-  font-size: 11.5px; font-weight: 600; color: var(--ink);
-  background: #fff; border: 1px solid #c7d2fe; border-radius: 7px; padding: 5px 9px; white-space: nowrap;
+  font-size: 12px; font-weight: 600; color: var(--ink);
+  background: #fff; border: 1px solid #c7d2fe; border-radius: 7px; padding: 5px 10px; white-space: nowrap;
 }
-.pipe .arrow { color: var(--accent); font-weight: 700; font-size: 13px; }
+.pipe .arrow { color: var(--accent); font-weight: 700; font-size: 13px; transform: rotate(90deg); margin-left: 16px; }
 
-.tile-body { padding: 22px 24px 24px; display: flex; flex-direction: column; flex: 1 1 auto; }
+.tile-body { padding: 24px 28px; display: flex; flex-direction: column; flex: 1 1 auto; }
 .tile .kicker { font-size: 12px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: .04em; }
 .tile h3 { font-size: 20px; letter-spacing: -.02em; margin: 7px 0 9px; }
 .tile .usecase { font-weight: 600; color: var(--ink); margin: 0 0 8px; font-size: 15px; }
@@ -239,7 +249,9 @@ footer .muted { margin-top: 34px; font-size: 13px; color: #94a3b8; }
   .card-media { border-right: 0; border-bottom: 1px solid var(--line); }
   .skill-grid { grid-template-columns: repeat(2, 1fr); }
   .domains { grid-template-columns: repeat(2, 1fr); }
-  .grid { grid-template-columns: 1fr; }
+  .tile { flex-direction: column; }
+  .pipe { flex: 1 1 auto; flex-direction: row; flex-wrap: wrap; align-items: center; border-right: 0; border-bottom: 1px solid var(--line); }
+  .pipe .arrow { transform: none; margin-left: 0; }
   .hero h1 { font-size: 36px; }
   .nav .links a { margin-left: 14px; }
 }

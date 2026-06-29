@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Security Data Engineer Portfolio</title>
-<meta name="description" content="Security data engineer building production pipelines across cyber threat intelligence, vulnerability management, and posture management (cryptographic and AI-agent)." />
+<meta name="description" content="A security data engineer building production pipelines across cyber threat intelligence, vulnerability management, and posture management (cryptographic and AI-agent)." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -16,9 +16,9 @@
   <div class="wrap">
     <span class="brand">Security Data Engineer</span>
     <span class="links">
-      <a href="#cti">Threat Intel</a>
-      <a href="#vm">Vuln Mgmt</a>
-      <a href="#posture">Posture Mgmt</a>
+      <a href="#work" onclick="filterWork('cti')">Threat Intel</a>
+      <a href="#work" onclick="filterWork('vm')">Vuln Mgmt</a>
+      <a href="#work" onclick="filterWork('posture')">Posture Mgmt</a>
       <a class="contact" href="#contact">Contact</a>
     </span>
   </div>
@@ -27,57 +27,38 @@
 <header class="hero">
   <div class="wrap">
     <span class="eyebrow">Security Data Engineering</span>
-    <h1>I turn raw security data into decisions.</h1>
+    <h1>Turning raw security data into decisions.</h1>
     <p class="lead">
-      I design and ship production data systems across <strong>cyber threat intelligence</strong>,
-      <strong>vulnerability management</strong>, and <strong>posture management</strong>.
-      Most of the work sits upstream of any model: making messy, multi-source security data
-      trustworthy enough that a team will act on it.
+      A security data engineer who designs and ships production data systems across
+      <strong>cyber threat intelligence</strong>, <strong>vulnerability management</strong>,
+      and <strong>posture management</strong>. Most of the work sits upstream of any model:
+      making messy, multi-source security data trustworthy enough that a team will act on it.
     </p>
     <div class="cta">
-      <a class="btn primary" href="#cti">View my work</a>
+      <a class="btn primary" href="#work">View the work</a>
       <a class="btn" href="https://github.com/kavi0207" target="_blank" rel="noopener">GitHub</a>
-    </div>
-    <p class="trust">
-      <strong>12+ years</strong> in data &amp; AI · ex-<strong>SecurityScorecard</strong>, Deloitte ·
-      <strong>~280K</strong> CVEs scored daily · production systems across three security domains
-    </p>
-
-    <!-- domain overview: the three buckets, up front -->
-    <div class="domains">
-      <a class="domain" href="#cti">
-        <span class="n">01</span>
-        <h4>Cyber Threat Intelligence</h4>
-        <p>Dark-web exposure and the quantum threat landscape.</p>
-        <span class="count">2 projects →</span>
-      </a>
-      <a class="domain" href="#vm">
-        <span class="n">02</span>
-        <h4>Vulnerability Management</h4>
-        <p>Threat-informed risk scoring and patch prioritization.</p>
-        <span class="count">1 project →</span>
-      </a>
-      <a class="domain" href="#posture">
-        <span class="n">03</span>
-        <h4>Posture Management</h4>
-        <p>Cryptographic (post-quantum) and AI-agent security posture.</p>
-        <span class="count">3 projects →</span>
-      </a>
     </div>
   </div>
 </header>
 
-<!-- BUCKET 1 / CTI -->
-<section id="cti" class="domain-section">
+<section id="work" class="domain-section">
   <div class="wrap">
-    <div class="cat">
-      <span class="cat-label">01 · Cyber Threat Intelligence</span>
-      <h2 class="cat-title">Knowing who and what is coming</h2>
-      <p class="cat-desc">External threat data (dark-web exposure and the quantum threat landscape), turned into structured, trustworthy intelligence.</p>
+    <div class="section-head">
+      <h2>Selected work</h2>
     </div>
+
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all" onclick="filterWork('all')">All</button>
+      <button class="filter-btn" data-filter="cti" onclick="filterWork('cti')">Cyber Threat Intelligence</button>
+      <button class="filter-btn" data-filter="vm" onclick="filterWork('vm')">Vulnerability Management</button>
+      <button class="filter-btn" data-filter="posture" onclick="filterWork('posture')">Posture Management</button>
+    </div>
+    <p id="filter-desc">Production systems across three security domains.</p>
+
     <div class="grid">
 
-      <article class="tile">
+      <!-- CTI: Dark-Web Monitoring -->
+      <article class="tile" data-cat="cti">
         <div class="pipe">
           <span class="stage">DarkOwl API</span><span class="arrow">→</span>
           <span class="stage">Dedup</span><span class="arrow">→</span>
@@ -85,7 +66,7 @@
           <span class="stage">Pub/Sub alert</span>
         </div>
         <div class="tile-body">
-          <span class="kicker">Dark-Web Monitoring</span>
+          <span class="kicker">Cyber Threat Intelligence · Dark-Web Monitoring</span>
           <h3>Watching the Dark Web at Scale</h3>
           <p class="usecase">When a company’s credentials surface on the dark web, it flags them before attackers can move.</p>
           <p>Queries a darknet-intelligence API, collapses thousands of noisy matches into canonical findings, uses Gemini for role-aware false-positive filtering, and surfaces real-time exposure alerts via Pub/Sub.</p>
@@ -101,14 +82,15 @@
         </div>
       </article>
 
-      <article class="tile">
+      <!-- CTI: Quantum Threat Intel -->
+      <article class="tile" data-cat="cti">
         <div class="pipe">
           <span class="stage">Research</span><span class="arrow">→</span>
           <span class="stage">Threat register</span><span class="arrow">→</span>
           <span class="stage">Analyst briefings</span>
         </div>
         <div class="tile-body">
-          <span class="kicker">Quantum / PQC Threat Intel</span>
+          <span class="kicker">Cyber Threat Intelligence · Quantum / PQC</span>
           <h3>Quantum Security Threat Intelligence</h3>
           <p class="usecase">Which quantum risks are live today, and which are still years out.</p>
           <p>A sourced threat register separating <em>future</em> cryptanalytic risk (Shor/Grover) from the <em>live</em> migration-era attack surface (post-quantum side-channels, downgrade attacks, harvest-now-decrypt-later). Written to state attacker capability rather than to fear-sell, and published as analyst briefings.</p>
@@ -123,21 +105,8 @@
         </div>
       </article>
 
-    </div>
-  </div>
-</section>
-
-<!-- BUCKET 2 / VULN MGMT -->
-<section id="vm" class="domain-section alt">
-  <div class="wrap">
-    <div class="cat">
-      <span class="cat-label">02 · Risk-Based Vulnerability Management</span>
-      <h2 class="cat-title">Deciding what to fix first</h2>
-      <p class="cat-desc">Threat-informed prioritization that collapses a flood of vulnerabilities into the few that demand action now.</p>
-    </div>
-    <div class="grid">
-
-      <article class="tile">
+      <!-- VM: CVE risk scoring -->
+      <article class="tile" data-cat="vm">
         <div class="pipe">
           <span class="stage">12+ feeds</span><span class="arrow">→</span>
           <span class="stage">Enrich</span><span class="arrow">→</span>
@@ -145,7 +114,7 @@
           <span class="stage">0&ndash;100 score</span>
         </div>
         <div class="tile-body">
-          <span class="kicker">Risk Scoring · Patch Triage</span>
+          <span class="kicker">Vulnerability Management · Risk Scoring</span>
           <h3>Scoring Every Known Vulnerability</h3>
           <p class="usecase">Which of ~270,000 known CVEs should you patch first?</p>
           <p>Fuses 12+ authoritative feeds (NVD, EPSS, CISA KEV, MITRE ATT&amp;CK, ThreatFox and more) into a single evidence-backed 0&ndash;100 risk score per CVE, refreshed daily, with targeted LLM gap-filling, and mapped to the Open Cybersecurity Schema Framework (OCSF) so any SIEM or data lake can ingest it.</p>
@@ -161,22 +130,8 @@
         </div>
       </article>
 
-    </div>
-  </div>
-</section>
-
-<!-- BUCKET 3 / POSTURE MANAGEMENT (PQC + AI-SPM) -->
-<section id="posture" class="domain-section">
-  <div class="wrap">
-    <div class="cat">
-      <span class="cat-label">03 · Posture Management</span>
-      <h2 class="cat-title">Knowing your exposure before anyone attacks it</h2>
-      <p class="cat-desc">One repeatable loop (discover, assess, score, track) applied across domains. Today it covers <strong>cryptographic posture</strong>: how ready an organization is for post-quantum cryptography (PQC). Next is <strong>AI-agent posture</strong>, or AI security posture management (AI-SPM), the telemetry incumbent tools don’t yet cover.</p>
-    </div>
-    <div class="grid">
-
-      <!-- Cryptographic posture: scanner -->
-      <article class="tile">
+      <!-- Posture: PQC scanner -->
+      <article class="tile" data-cat="posture">
         <div class="pipe">
           <span class="stage">Scan</span><span class="arrow">→</span>
           <span class="stage">Fingerprint</span><span class="arrow">→</span>
@@ -184,7 +139,7 @@
           <span class="stage">Posture map</span>
         </div>
         <div class="tile-body">
-          <span class="kicker">Cryptographic Posture · PQC</span>
+          <span class="kicker">Posture Management · Cryptographic (PQC)</span>
           <h3>External PQC Discovery and Posture Maps</h3>
           <p class="usecase">Maps the cryptography an organization exposes to the outside, and flags what is not yet post-quantum ready.</p>
           <p>A Rust scanner (core, discovery, DNS, and PQC crates) that fingerprints an organization’s externally-observable cryptography, builds a cryptographic bill of materials (CBOM), and renders cross-org maps showing where crypto is concentrated and where it cannot be swapped out easily.</p>
@@ -199,8 +154,8 @@
         </div>
       </article>
 
-      <!-- Cryptographic posture: sector benchmarks -->
-      <article class="tile">
+      <!-- Posture: sector benchmarks -->
+      <article class="tile" data-cat="posture">
         <div class="pipe">
           <span class="stage">Scan sector</span><span class="arrow">→</span>
           <span class="stage">Score posture</span><span class="arrow">→</span>
@@ -208,7 +163,7 @@
           <span class="stage">Report</span>
         </div>
         <div class="tile-body">
-          <span class="kicker">Cryptographic Posture · PQC</span>
+          <span class="kicker">Posture Management · Cryptographic (PQC)</span>
           <h3>Sector PQC-Readiness Reports</h3>
           <p class="usecase">Where a whole sector stands on the post-quantum migration clock, firm by firm.</p>
           <p>Automated, repeatable readiness benchmarks across sectors (banking, insurance, payments, public) and countries, scanning large organization populations, scoring posture, and generating publication-grade reports with cross-org comparison.</p>
@@ -223,8 +178,8 @@
         </div>
       </article>
 
-      <!-- AI posture: AI-SPM -->
-      <article class="tile">
+      <!-- Posture: AI-SPM -->
+      <article class="tile" data-cat="posture">
         <div class="pipe">
           <span class="stage">Instrument agent</span><span class="arrow">→</span>
           <span class="stage">Inventory · AI-BOM</span><span class="arrow">→</span>
@@ -232,7 +187,7 @@
           <span class="stage">Baseline</span>
         </div>
         <div class="tile-body">
-          <span class="kicker">AI Security Posture · AI-SPM <span class="badge">In progress</span></span>
+          <span class="kicker">Posture Management · AI Security (AI-SPM) <span class="badge">In progress</span></span>
           <h3>AI-Agent Visibility and Posture</h3>
           <p class="usecase">Which AI agents you run, who owns them, and what they can reach.</p>
           <p>Instrument agents exposed over the Model Context Protocol (MCP) with OpenTelemetry GenAI, build an inventory and ownership graph, generate an AI bill of materials (AI-BOM), check for over-permissioned access, and learn behavioral baselines that show when an agent drifts from normal. It is the agent-visibility layer most tools still miss.</p>
@@ -252,7 +207,7 @@
 <section id="skills" class="skills">
   <div class="wrap">
     <div class="section-head">
-      <h2>What I work with</h2>
+      <h2>Core stack</h2>
       <p>The stack behind these systems, across threat intelligence, vulnerability management, and posture management.</p>
     </div>
     <div class="skill-grid">
@@ -298,7 +253,7 @@
 
 <footer id="contact">
   <div class="wrap">
-    <h2>Let’s talk</h2>
+    <h2>Get in touch</h2>
     <p>Open to security data engineering, threat intelligence, and posture-management roles.</p>
     <div class="cta" style="justify-content:center;">
       <a class="btn primary" href="https://github.com/kavi0207" target="_blank" rel="noopener">GitHub</a>
@@ -307,6 +262,25 @@
     <p class="muted">Built with Dagster, Python, Rust, and a lot of security data.</p>
   </div>
 </footer>
+
+<script>
+  var WORK_DESCS = {
+    all: 'Production systems across three security domains.',
+    cti: 'External threat data turned into structured, trustworthy intelligence.',
+    vm: 'Threat-informed prioritization: which of hundreds of thousands of CVEs to fix first.',
+    posture: 'Discover, assess, score, and track security posture, for cryptography (post-quantum) and AI agents.'
+  };
+  function filterWork(cat) {
+    document.querySelectorAll('.tile[data-cat]').forEach(function (t) {
+      t.style.display = (cat === 'all' || t.getAttribute('data-cat') === cat) ? '' : 'none';
+    });
+    document.querySelectorAll('.filter-btn').forEach(function (b) {
+      b.classList.toggle('active', b.getAttribute('data-filter') === cat);
+    });
+    var d = document.getElementById('filter-desc');
+    if (d) { d.textContent = WORK_DESCS[cat] || WORK_DESCS.all; }
+  }
+</script>
 
 </body>
 </html>
