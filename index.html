@@ -16,8 +16,8 @@
   <div class="wrap">
     <span class="brand">Security Data Engineer</span>
     <span class="links">
-      <a href="#work" onclick="filterWork('cti')">Threat Intel</a>
       <a href="#work" onclick="filterWork('vm')">Vuln Mgmt</a>
+      <a href="#work" onclick="filterWork('cti')">Threat Intel</a>
       <a href="#work" onclick="filterWork('posture')">Posture Mgmt</a>
       <a class="contact" href="#contact">Contact</a>
     </span>
@@ -49,13 +49,38 @@
 
     <div class="filter-bar">
       <button class="filter-btn active" data-filter="all" onclick="filterWork('all')">All</button>
-      <button class="filter-btn" data-filter="cti" onclick="filterWork('cti')">Cyber Threat Intelligence</button>
       <button class="filter-btn" data-filter="vm" onclick="filterWork('vm')">Vulnerability Management</button>
+      <button class="filter-btn" data-filter="cti" onclick="filterWork('cti')">Cyber Threat Intelligence</button>
       <button class="filter-btn" data-filter="posture" onclick="filterWork('posture')">Posture Management</button>
     </div>
     <p id="filter-desc">Production systems across three security domains.</p>
 
     <div class="grid">
+
+      <!-- VM: CVE risk scoring -->
+      <article class="tile" data-cat="vm">
+        <div class="pipe">
+          <span class="stage">12+ feeds</span><span class="arrow">→</span>
+          <span class="stage">Enrich</span><span class="arrow">→</span>
+          <span class="stage">LLM gap-fill</span><span class="arrow">→</span>
+          <span class="stage">0&ndash;100 score</span>
+        </div>
+        <div class="tile-body">
+          <span class="kicker">Vulnerability Management · Risk Scoring</span>
+          <h3>Scoring Every Known Vulnerability</h3>
+          <p class="usecase">Which of ~270,000 known CVEs should you patch first?</p>
+          <p>Fuses 12+ authoritative feeds (NVD, EPSS, CISA KEV, MITRE ATT&amp;CK, ThreatFox and more) into a single evidence-backed 0&ndash;100 risk score per CVE, refreshed daily, with targeted LLM gap-filling, and mapped to the Open Cybersecurity Schema Framework (OCSF) so any SIEM or data lake can ingest it.</p>
+          <span class="card-stat">280K CVEs into ~1,500 to patch now</span>
+          <div class="chips">
+            <span class="chip">Dagster</span><span class="chip">PostgreSQL</span><span class="chip">SQLAlchemy async</span>
+            <span class="chip">Claude · Vertex</span><span class="chip">OCSF</span>
+          </div>
+          <div class="card-links">
+            <a href="threat-intel.html">Read the write-up →</a>
+            <a class="pdf" href="pdf/threat-intel.pdf" target="_blank" rel="noopener">PDF</a>
+          </div>
+        </div>
+      </article>
 
       <!-- CTI: Dark-Web Monitoring -->
       <article class="tile" data-cat="cti">
@@ -101,31 +126,6 @@
           </div>
           <div class="card-links">
             <span class="pdf">Briefing available on request</span>
-          </div>
-        </div>
-      </article>
-
-      <!-- VM: CVE risk scoring -->
-      <article class="tile" data-cat="vm">
-        <div class="pipe">
-          <span class="stage">12+ feeds</span><span class="arrow">→</span>
-          <span class="stage">Enrich</span><span class="arrow">→</span>
-          <span class="stage">LLM gap-fill</span><span class="arrow">→</span>
-          <span class="stage">0&ndash;100 score</span>
-        </div>
-        <div class="tile-body">
-          <span class="kicker">Vulnerability Management · Risk Scoring</span>
-          <h3>Scoring Every Known Vulnerability</h3>
-          <p class="usecase">Which of ~270,000 known CVEs should you patch first?</p>
-          <p>Fuses 12+ authoritative feeds (NVD, EPSS, CISA KEV, MITRE ATT&amp;CK, ThreatFox and more) into a single evidence-backed 0&ndash;100 risk score per CVE, refreshed daily, with targeted LLM gap-filling, and mapped to the Open Cybersecurity Schema Framework (OCSF) so any SIEM or data lake can ingest it.</p>
-          <span class="card-stat">280K CVEs into ~1,500 to patch now</span>
-          <div class="chips">
-            <span class="chip">Dagster</span><span class="chip">PostgreSQL</span><span class="chip">SQLAlchemy async</span>
-            <span class="chip">Claude · Vertex</span><span class="chip">OCSF</span>
-          </div>
-          <div class="card-links">
-            <a href="threat-intel.html">Read the write-up →</a>
-            <a class="pdf" href="pdf/threat-intel.pdf" target="_blank" rel="noopener">PDF</a>
           </div>
         </div>
       </article>
