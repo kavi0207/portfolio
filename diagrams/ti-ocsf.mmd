@@ -1,0 +1,21 @@
+%%{init: {'theme':'base','themeVariables':{'fontSize':'14px','lineColor':'#94a3b8'}}}%%
+flowchart LR
+    SRC["vulnerability_risk_score<br/>+ vulnerability (Postgres)<br/>cve · cvss · epss · cwes<br/>risk_score · risk_level · in_kev"]
+    ADP["OCSF adapter<br/>field mapping +<br/>enrichment objects"]
+    OCSF["OCSF Vulnerability Finding<br/>class_uid 2002<br/>(JSON event)"]
+
+    LAKE["Amazon Security Lake"]
+    SIEM["Splunk / SIEM"]
+    XDR["XDR · SOAR"]
+
+    SRC --> ADP --> OCSF
+    OCSF --> LAKE
+    OCSF --> SIEM
+    OCSF --> XDR
+
+    style SRC fill:#f1f5f9,stroke:#475569,color:#0f172a
+    style ADP fill:#eef2ff,stroke:#4f46e5,color:#0f172a
+    style OCSF fill:#0f172a,stroke:#0f172a,color:#fff
+    style LAKE fill:#ecfeff,stroke:#06b6d4,color:#0f172a
+    style SIEM fill:#ecfeff,stroke:#06b6d4,color:#0f172a
+    style XDR fill:#ecfeff,stroke:#06b6d4,color:#0f172a

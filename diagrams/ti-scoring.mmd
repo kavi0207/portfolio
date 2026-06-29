@@ -1,0 +1,50 @@
+%%{init: {'theme':'base','themeVariables':{'fontSize':'15px','lineColor':'#64748b','clusterBkg':'#f8fafc','clusterBorder':'#cbd5e1'}}}%%
+flowchart LR
+    subgraph IN["Signals per CVE"]
+        direction TB
+        S1["KEV / ransomware flag"]
+        S2["EPSS probability"]
+        S3["CVSS base score"]
+        S4["Threat actors · malware<br/>active IOCs"]
+        S5["ATT&CK kill-chain phase"]
+    end
+
+    subgraph COMP["Weighted components"]
+        direction TB
+        C1["Exploitation Evidence<br/><b>30 pts</b>"]
+        C2["Exploitation Likelihood<br/><b>22 pts</b>"]
+        C3["Technical Severity<br/><b>18 pts</b>"]
+        C4["Adversary Interest<br/><b>20 pts</b>"]
+        C5["Kill-Chain Bonus<br/><b>+0–5 pts</b>"]
+    end
+
+    SCORE(["RISK SCORE<br/>0 – 100"])
+
+    subgraph LVL["Risk level"]
+        direction TB
+        L1["CRITICAL ≥ 75"]
+        L2["HIGH 60–74"]
+        L3["MEDIUM 40–59"]
+        L4["LOW < 40"]
+    end
+
+    S1 --> C1
+    S2 --> C1
+    S2 --> C2
+    S3 --> C3
+    S4 --> C4
+    S5 --> C5
+
+    C1 --> SCORE
+    C2 --> SCORE
+    C3 --> SCORE
+    C4 --> SCORE
+    C5 --> SCORE
+    SCORE --> LVL
+
+    style C1 fill:#fee2e2,stroke:#ef4444
+    style C2 fill:#ffedd5,stroke:#f97316
+    style C3 fill:#fef9c3,stroke:#eab308
+    style C4 fill:#e0e7ff,stroke:#6366f1
+    style C5 fill:#dcfce7,stroke:#22c55e
+    style SCORE fill:#0f172a,stroke:#0f172a,color:#fff

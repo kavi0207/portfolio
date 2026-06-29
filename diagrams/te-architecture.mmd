@@ -1,0 +1,22 @@
+%%{init: {'theme':'base','themeVariables':{'fontSize':'15px','lineColor':'#94a3b8'}}}%%
+flowchart LR
+    BS["BreachSense<br/>(Scrapy spider)"]
+    RL["Ransomware.live<br/>(REST API)"]
+    RSS["Threat-news RSS"]
+
+    BRONZE["🥉 BRONZE · raw<br/>raw_breachsense<br/>ransomware_live_*<br/>raw_news"]
+    SILVER["🥈 SILVER · LLM-enriched<br/>victim_detail (domain truth · industry)<br/>threat_news_entities<br/>ransomware classifier (XGBoost)<br/>unified_threat_events (dedup)"]
+    GOLD[("🥇 GOLD · PostgreSQL<br/>PublicThreatEvent<br/>+ Company · Industry · ThreatActor")]
+    CONS["Threat-intel & hunting<br/>'who · what industry · which actor'"]
+
+    BS --> BRONZE
+    RL --> BRONZE
+    RSS --> BRONZE
+    BRONZE --> SILVER --> GOLD --> CONS
+
+    classDef src fill:#eff6ff,stroke:#3b82f6,color:#0f172a
+    class BS,RL,RSS src
+    style BRONZE fill:#fff7ed,stroke:#b45309,color:#0f172a
+    style SILVER fill:#f1f5f9,stroke:#64748b,color:#0f172a
+    style GOLD fill:#fefce8,stroke:#ca8a04,color:#0f172a
+    style CONS fill:#fef2f2,stroke:#ef4444,color:#0f172a

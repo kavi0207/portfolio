@@ -1,0 +1,17 @@
+%%{init: {'theme':'base','themeVariables':{'fontSize':'14px','lineColor':'#94a3b8'}}}%%
+flowchart LR
+    RAW["Raw DarkOwl rows<br/>(many per finding,<br/>multiple query types)"]
+
+    MATCH["domain_matching.py<br/>normalize host / domain<br/>extract &lt;em&gt; terms<br/>exact OR subdomain match"]
+    IDENT["finding_identity.py<br/>finding_id = UUID5(result_id | domain)<br/>query precedence:<br/>email &gt; domain &gt; website &gt; keyword<br/>choose canonical row"]
+    BODY["body_extract.py<br/>500-char window around<br/>matched-domain mention<br/>→ evidence snippet"]
+
+    OUT["1 canonical, deduped,<br/>evidence-backed finding"]
+
+    RAW --> MATCH --> IDENT --> BODY --> OUT
+
+    style RAW fill:#e2e8f0,stroke:#475569,color:#0f172a
+    style MATCH fill:#f0fdf4,stroke:#22c55e,color:#0f172a
+    style IDENT fill:#eff6ff,stroke:#3b82f6,color:#0f172a
+    style BODY fill:#fff7ed,stroke:#f97316,color:#0f172a
+    style OUT fill:#0f172a,stroke:#0f172a,color:#fff

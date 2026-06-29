@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Scoring Every Known Vulnerability</title><meta name="description" content="A threat-intelligence pipeline that scores every known CVE 0-100."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+</head><body>
+<article class="article">
+<a class="back" href="index.html">&larr; Back to portfolio</a>
+<h1>Scoring Every Known Vulnerability: A Threat-Intelligence Data Pipeline That Tells You What to Patch First</h1>
+<p><em>How I built a Dagster pipeline that fuses 12+ threat feeds into a single 0–100 risk score for ~270,000 CVEs — so security teams stop guessing and start prioritizing.</em></p>
+<hr />
+<blockquote>
+<p><strong>TL;DR</strong>
+- <strong>Problem:</strong> ~270k known CVEs, ~25k new per year. CVSS severity alone tells you <em>how bad</em> a vuln is in theory, not <em>whether anyone is actually exploiting it</em>. Teams drown in "critical" alerts.
+- <strong>Solution:</strong> A data pipeline that ingests 12+ authoritative threat feeds, links each CVE to the attacker techniques and threat actors that use it, and computes one evidence-backed <strong>risk score (0–100)</strong>.
+- <strong>Stack:</strong> Python 3.12 · Dagster · PostgreSQL 16 (async SQLAlchemy) · Claude Sonnet 4.6 (Vertex AI) · Prometheus · Docker/gRPC.
+- <strong>Outcome:</strong> A daily-refreshed, queryable risk table that answers <em>"which of my open CVEs should I patch this week?"</em> with a defensible, transparent score.</p>
+</blockquote>
+<hr />
+<h2>By the numbers</h2>
+<div class="stats">
+<div class="stat"><span class="num">280K</span><span class="lab">CVEs scored, refreshed daily</span></div>
+<div class="stat"><span class="num">12+</span><span class="lab">intelligence sources fused</span></div>
+<div class="stat"><span class="num">~1,500</span><span class="lab">CRITICAL surfaced from 280K (0.5%)</span></div>
+<div class="stat"><span class="num">~99%</span><span class="lab">of CRITICAL confirmed in CISA KEV</span></div>
+</div>
+
+<!-- METRICS ARE ILLUSTRATIVE of a system at this scale. Replace with your own measured
+     values (Prometheus sync_records_total / llm_cost_dollars_total, or DB COUNT queries)
+     before publishing — you will be asked to defend every number in interviews. -->
+
+<hr />
+<h2>The problem: severity is not risk</h2>
+<p>Every vulnerability management team faces the same flood. The National Vulnerability Database publishes tens of thousands of CVEs a year, most stamped "HIGH" or "CRITICAL" by CVSS. But CVSS measures <em>theoretical</em> severity — it can't tell you that <strong>only ~5% of CVEs are ever exploited in the wild</strong>, or that a "medium" bug is currently being weaponized by a ransomware crew.</p>
+<p>The signal that matters — <em>is this being exploited, by whom, and how easily?</em> — is scattered across a dozen disconnected sources: NVD, EPSS, CISA's KEV catalog, MITRE ATT&amp;CK, ExploitDB, Metasploit, ThreatFox, and more. No single feed gives you the whole picture.</p>
+<p><strong>This pipeline's job: collapse all of that into one number a human can act on.</strong></p>
+<h2>Architecture</h2>
+<p><img alt="Threat-intel pipeline architecture" src="diagrams/ti-architecture.png" /></p>
+<p>The pipeline is a Dagster asset graph organized into four stages — <strong>Ingest → Enrich → LLM-augment → Score</strong> — landing in a PostgreSQL <code>world</code> schema that downstream SOC and vuln-management tools query directly.</p>
+<h3>Stage 1 — Ingest: 12+ authoritative feeds</h3>
+<p>Each source is a Dagster asset with its own sync cadence, retry policy, and Prometheus metrics:</p>
+<table>
+<thead>
+<tr>
+<th>Feed</th>
+<th>What it contributes</th>
+<th>Refresh</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>NVD</strong></td>
+<td>CVE metadata, CVSS (v2/3.1/4.0), CWE, affected products</td>
+<td>hourly, incremental</td>
+</tr>
+<tr>
+<td><strong>CISA KEV</strong></td>
+<td><em>Confirmed</em> exploited-in-the-wild catalog</td>
+<td>6h + a 15-min change sensor</td>
+</tr>
+<tr>
+<td><strong>EPSS</strong></td>
+<td>Daily exploit-probability score (0–1) per CVE</td>
+<td>daily</td>
+</tr>
+<tr>
+<td><strong>MITRE ATT&amp;CK</strong></td>
+<td>Techniques, threat actors, malware, campaigns</td>
+<td>weekly</td>
+</tr>
+<tr>
+<td><strong>CAPEC / D3FEND</strong></td>
+<td>CWE→technique mappings, defensive mappings</td>
+<td>weekly</td>
+</tr>
+<tr>
+<td><strong>ExploitDB · Nuclei · Metasploit</strong></td>
+<td>Public exploit / scanner / weaponized-module availability</td>
+<td>daily</td>
+</tr>
+<tr>
+<td><strong>ThreatFox</strong></td>
+<td>Live malware IOCs from active campaigns</td>
+<td>daily</td>
+</tr>
+<tr>
+<td><strong>VulnCheck</strong></td>
+<td>Commercial exploitation reports</td>
+<td>daily</td>
+</tr>
+</tbody>
+</table>
+<p>The NVD asset streams 2,000 CVEs per page and syncs incrementally by <code>lastModDate</code>; a sensor watches the KEV feed every 15 minutes and fires a refresh the moment CISA publishes a new exploited vuln.</p>
+<h3>Stage 2 — Enrich: turning a CVE into an attack story</h3>
+<p>A raw CVE is just an ID and a severity. The enrichment stage answers <em>"what can an attacker actually do with this?"</em> by walking a graph:</p>
+<p><strong>CVE → CWE (weakness) → ATT&amp;CK technique → threat actor / malware.</strong></p>
+<p>CAPEC provides the CWE→technique edges; the pipeline computes the transitive closure to link each vulnerability to the concrete adversary techniques it enables, and D3FEND attaches the defensive countermeasures.</p>
+<h3>Stage 3 — LLM enrichment: filling the gaps</h3>
+<p>Real-world data is incomplete — many CVEs ship with no CWE, and many CWEs have no CAPEC mapping. Two targeted <strong>Claude Sonnet 4.6</strong> (via Vertex AI) tasks close those gaps:</p>
+<ul>
+<li><strong>Infer missing CWEs</strong> from the CVE's free-text description (batched 20 CVEs/call).</li>
+<li><strong>Map orphan CWEs</strong> to ATT&amp;CK techniques (batched 10/call), with the model's one-sentence rationale stored alongside a confidence score.</li>
+</ul>
+<p>The system prompt (the CWE reference list) is cached with <code>cache_control: ephemeral</code>, and calls run with bounded concurrency and exponential backoff. The LLM is used <em>surgically</em> — only where deterministic sources fall short — which keeps cost and hallucination risk low. Every LLM-derived edge is tagged with <code>source = 'llm'</code> so it's auditable and separable from authoritative mappings.</p>
+<h3>Stage 4 — The scoring engine</h3>
+<p>This is the heart of the system: a transparent, weighted model that converts all those signals into a single 0–100 score.</p>
+<p><img alt="CVE risk scoring model" src="diagrams/ti-scoring.png" /></p>
+<pre><code>Risk Score (0–100) =
+    Exploitation Evidence   (30 pts)   — KEV, ransomware, exploit maturity
+  + Exploitation Likelihood (22 pts)   — EPSS + a KEV floor
+  + Technical Severity      (18 pts)   — CVSS, linearly scaled
+  + Adversary Interest      (20 pts)   — # threat actors / malware / live IOCs (log-scaled)
+  + Kill-Chain Bonus        (0–5 pts)  — extra weight for initial-access techniques
+</code></pre>
+<p>A few design choices I'm proud of:</p>
+<ul>
+<li><strong>Evidence beats theory.</strong> A CVE in CISA KEV <em>with</em> known ransomware use scores the full 30 evidence points; a mere proof-of-concept scores 10. The model rewards <em>confirmed</em> exploitation over hypothetical severity.</li>
+<li><strong>EPSS as a forward signal.</strong> Vulnerabilities with EPSS ≥ 0.9 get inferred exploitation credit even before they hit KEV — roughly 60% of them eventually do.</li>
+<li><strong>Adversary interest is log-scaled.</strong> The jump from 0→1 threat actor matters far more than 40→60, so counts are compressed with <code>log₂</code> to avoid letting a handful of over-reported CVEs dominate.</li>
+<li><strong>Kill-chain awareness.</strong> An <em>initial-access</em> technique earns a +5 bonus — because a vuln an attacker can use to get in the front door is categorically more dangerous than one that needs prior access.</li>
+</ul>
+<p>The output buckets cleanly: <strong>CRITICAL ≥ 75 · HIGH 60–74 · MEDIUM 40–59 · LOW &lt; 40</strong> — and in practice nearly every CRITICAL-scored CVE is a confirmed KEV entry, which is exactly the validation you want.</p>
+<h2>Orchestration: a dependency-aware daily refresh</h2>
+<p><img alt="Orchestration schedule" src="diagrams/ti-schedule.png" /></p>
+<p>Fast-moving feeds (NVD hourly, KEV every 6h) run independently; slow reference data (ATT&amp;CK, CAPEC, D3FEND) refreshes weekly. Everything funnels into a single nightly <strong>risk-scoring job at 04:00</strong> that depends on all upstream assets — so the score always reflects the freshest available intelligence. The whole thing runs as a Dockerized gRPC code location with a separate Postgres for Dagster metadata and another for application data.</p>
+<h2>Data model</h2>
+<p>Scores land in <code>world.vulnerability_risk_score</code> (component sub-scores preserved for explainability), joined to a rich graph: <code>vulnerability</code>, <code>cisa_kev</code>, <code>epss_history</code>, <code>exploit</code>, the <code>attack_*</code> tables (techniques, actors, malware, campaigns), <code>cwe_technique</code>, and <code>ioc</code>. Floats are stored as scaled integers, lists as native Postgres arrays, and risk scoring reads from a read-only replica connection to isolate it from ingestion load.</p>
+<h2>Interoperability: speaking OCSF</h2>
+<p>A risk score is only useful if downstream security tooling can consume it. The serving layer maps each scored CVE to an <strong>OCSF Vulnerability Finding</strong> (<code>class_uid 2002</code>) — the Open Cybersecurity Schema Framework that underpins Amazon Security Lake, Splunk, and most modern security data lakes. Any OCSF-native SIEM, XDR, or data lake ingests the scored, enriched CVEs with no bespoke glue.</p>
+<p><img alt="OCSF interoperability mapping" src="diagrams/ti-ocsf.png" /></p>
+<p>The mapping is direct, with the risk score and ATT&amp;CK context carried as OCSF enrichments:</p>
+<table>
+<thead>
+<tr>
+<th>Internal field (<code>vulnerability</code> / <code>vulnerability_risk_score</code>)</th>
+<th>OCSF Vulnerability Finding</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cve</code></td>
+<td><code>vulnerabilities[].cve.uid</code></td>
+</tr>
+<tr>
+<td><code>cvss_score</code></td>
+<td><code>vulnerabilities[].cve.cvss[].base_score</code></td>
+</tr>
+<tr>
+<td><code>cwes[]</code></td>
+<td><code>vulnerabilities[].cve.cwe[].uid</code></td>
+</tr>
+<tr>
+<td><code>epss_score</code></td>
+<td><code>vulnerabilities[].cve.epss.score</code></td>
+</tr>
+<tr>
+<td><code>risk_score</code> (0–100)</td>
+<td><code>finding_info</code> + <code>risk_score</code> enrichment</td>
+</tr>
+<tr>
+<td><code>risk_level</code></td>
+<td><code>severity_id</code> (Critical / High / Medium / Low)</td>
+</tr>
+<tr>
+<td><code>in_kev</code></td>
+<td><code>is_exploit_available</code> + KEV enrichment</td>
+</tr>
+<tr>
+<td><code>affected_products[]</code></td>
+<td><code>resources[].affected_packages</code></td>
+</tr>
+<tr>
+<td>linked ATT&amp;CK techniques</td>
+<td><code>enrichments[]</code> (technique IDs)</td>
+</tr>
+</tbody>
+</table>
+<p>This is the difference between <em>a scoring service</em> and <em>a scoring service that plugs into the security data fabric a team already runs.</em></p>
+<!-- Keep this section only if the OCSF adapter is actually built (or reword "maps" → "is designed to map").
+     It is a high-signal addition for security-data-engineering roles. -->
+
+<h2>What this project demonstrates</h2>
+<ul>
+<li><strong>Multi-source data integration</strong> — 12+ APIs/feeds with different formats (REST, CSV.gz, STIX JSON, XML), each with bespoke incremental-sync and retry logic.</li>
+<li><strong>Pragmatic LLM use</strong> — Claude applied <em>only</em> where deterministic data runs out, with caching, batching, confidence scoring, and full auditability.</li>
+<li><strong>A defensible domain model</strong> — the scoring weights encode real vulnerability-management expertise (KEV, EPSS, ATT&amp;CK, kill-chain), not arbitrary numbers.</li>
+<li><strong>Production data engineering</strong> — Dagster asset graph, sensors, retry policies, Prometheus metrics, read replicas, and a containerized deployment.</li>
+</ul>
+<hr />
+<p><em>Tech stack: Python 3.12 · Dagster 1.13 · PostgreSQL 16 · SQLAlchemy 2.0 (async/asyncpg) · httpx · anthropic[vertex] · Alembic · Prometheus · Docker + gRPC code locations · uv.</em></p>
+<hr/>
+<a class="back" href="index.html">&larr; Back to portfolio</a>
+&nbsp;&middot;&nbsp; <a class="back" href="pdf/threat-intel.pdf">Download as PDF</a>
+</article></body></html>

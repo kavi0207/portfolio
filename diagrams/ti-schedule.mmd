@@ -1,0 +1,25 @@
+%%{init: {'theme':'base','themeVariables':{'fontSize':'14px','lineColor':'#64748b'}}}%%
+flowchart LR
+    classDef hr fill:#dbeafe,stroke:#3b82f6
+    classDef day fill:#fef9c3,stroke:#eab308
+    classDef wk fill:#ede9fe,stroke:#a855f7
+    classDef final fill:#0f172a,stroke:#0f172a,color:#fff
+
+    NVD["NVD sync<br/>hourly"]:::hr
+    KEV["CISA KEV<br/>every 6h + 15m sensor"]:::hr
+    EPSS["EPSS<br/>daily 00:00"]:::day
+    TF["ThreatFox / VulnCheck<br/>daily 01:00"]:::day
+    EXP["ExploitDB·Nuclei·Metasploit<br/>daily 02:00"]:::day
+    ATT["MITRE ATT&CK·CAPEC·D3FEND<br/>weekly Sun"]:::wk
+    LLMJ["LLM enrichment<br/>daily 03:00"]:::day
+    LINKJ["CVE→technique link<br/>daily 03:30"]:::day
+    SCOREJ["RISK SCORING<br/>daily 04:00"]:::final
+
+    NVD --> SCOREJ
+    KEV --> SCOREJ
+    EPSS --> SCOREJ
+    TF --> SCOREJ
+    EXP --> SCOREJ
+    ATT --> LLMJ
+    LLMJ --> LINKJ
+    LINKJ --> SCOREJ

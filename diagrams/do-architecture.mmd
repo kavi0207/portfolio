@@ -1,0 +1,19 @@
+%%{init: {'theme':'base','themeVariables':{'fontSize':'15px','lineColor':'#94a3b8'}}}%%
+flowchart LR
+    DO["DARKNET SOURCE<br/>DarkOwl API<br/>HMAC-SHA1 · proxy<br/>email · domain · website · keyword"]
+    RAW["1 · INGEST<br/>raw_darkowl<br/>dlt → BigQuery / DuckDB"]
+    DEDUP["2 · DEDUP & ENRICH<br/>finding_id (UUID5) · severity<br/>noise filter · leak grouping"]
+    LLM["3 · LLM REVIEW<br/>Gemini 2.5 Flash<br/>role-aware verdict<br/>false-positive filter"]
+    ISSUE["4 · ISSUE<br/>issue rows<br/>evidence → GCS"]
+    PUB["5 · NOTIFY<br/>Pub/Sub publish<br/>leak · workspace · entity"]
+    CONS["Customer alerting<br/>'your data is on<br/>the dark web'"]
+
+    DO --> RAW --> DEDUP --> LLM --> ISSUE --> PUB --> CONS
+
+    style DO fill:#1e1b4b,stroke:#312e81,color:#fff
+    style RAW fill:#eff6ff,stroke:#3b82f6,color:#0f172a
+    style DEDUP fill:#f0fdf4,stroke:#22c55e,color:#0f172a
+    style LLM fill:#faf5ff,stroke:#a855f7,color:#0f172a
+    style ISSUE fill:#fff7ed,stroke:#f97316,color:#0f172a
+    style PUB fill:#f1f5f9,stroke:#475569,color:#0f172a
+    style CONS fill:#fef2f2,stroke:#ef4444,color:#0f172a

@@ -1,0 +1,27 @@
+%%{init: {'theme':'base','themeVariables':{'fontSize':'14px','lineColor':'#64748b'}}}%%
+flowchart LR
+    classDef p fill:#f3e8ff,stroke:#a855f7
+    classDef o fill:#fef9c3,stroke:#ca8a04
+
+    FIND["Deduped finding<br/>+ evidence + signals"]
+
+    subgraph PROMPT["Role-specific prompt routing"]
+        direction TB
+        P1["stealer_log_v1"]:::p
+        P2["data_breach_v1"]:::p
+        P3["mention_v1"]:::p
+        P4["darkweb_listing_v1"]:::p
+        P5["default_v1"]:::p
+    end
+
+    GEM["Gemini 2.5 Flash<br/>temp 0 · JSON out · 8 parallel workers"]
+
+    subgraph VERDICT["Structured verdict"]
+        direction TB
+        V1["is_false_positive"]:::o
+        V2["matched_domain_role"]:::o
+        V3["risk_level + confidence"]:::o
+        V4["user_summary"]:::o
+    end
+
+    FIND --> PROMPT --> GEM --> VERDICT

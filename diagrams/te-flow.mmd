@@ -1,0 +1,19 @@
+%%{init: {'theme':'base','themeVariables':{'fontSize':'14px','lineColor':'#64748b'}}}%%
+flowchart LR
+    classDef crawl fill:#dbeafe,stroke:#3b82f6
+    classDef load fill:#dcfce7,stroke:#22c55e
+    classDef llm fill:#f3e8ff,stroke:#a855f7
+    classDef db fill:#fef9c3,stroke:#ca8a04
+
+    A["Scrapy spider<br/>+ bounded queue"]:::crawl
+    B["dlt resource<br/>merge / upsert"]:::load
+    C["BigQuery / DuckDB<br/>data lake"]:::load
+    D["LangChain agent<br/>VictimDetail"]:::llm
+    E["tools:<br/>fetch_domain_info<br/>get_all_industries"]:::llm
+    F["dedup<br/>(domain + LLM)"]:::llm
+    G["async SQLAlchemy<br/>upsert + savepoints"]:::db
+    H[("PostgreSQL<br/>world schema")]:::db
+
+    A --> B --> C --> D
+    E -.tools.-> D
+    D --> F --> G --> H
