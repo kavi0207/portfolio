@@ -10,11 +10,11 @@
 <article class="article">
 <a class="back" href="index.html">&larr; Back to portfolio</a>
 <h1>Watching the Dark Web at Scale: A Pipeline That Tells Customers When Their Data Leaks</h1>
-<p><em>How I built a Dagster pipeline that queries a darknet-intelligence API, deduplicates the noise, uses Gemini to separate real exposures from false positives, and pushes real-time alerts — so a company learns its credentials are for sale before attackers use them.</em></p>
+<p><em>How I built a Dagster pipeline that queries a darknet-intelligence API, deduplicates the noise, uses Gemini to separate real exposures from false positives, and pushes real-time alerts, so a company learns its credentials are for sale before attackers use them.</em></p>
 <hr />
 <blockquote>
 <p><strong>TL;DR</strong>
-- <strong>Problem:</strong> Stolen credentials, breached databases, and company mentions surface constantly on darknet markets, forums, and paste sites — buried in enormous noise and duplicates. Manually triaging it doesn't scale.
+- <strong>Problem:</strong> Stolen credentials, breached databases, and company mentions surface constantly on darknet markets, forums, and paste sites, buried in enormous noise and duplicates. Manually triaging it doesn't scale.
 - <strong>Solution:</strong> A pipeline that queries the <strong>DarkOwl</strong> darknet API for customer domains/keywords, deduplicates findings down to one canonical record, uses <strong>Gemini</strong> to assign each a <em>role</em> and filter false positives, then publishes alerts via Pub/Sub.
 - <strong>Stack:</strong> Python 3.12 · Dagster · dlt · Google Gemini 2.5 Flash · BigQuery/DuckDB · PostgreSQL · GCS · Cloud Pub/Sub.
 - <strong>Outcome:</strong> Near-real-time, low-false-positive dark-web alerts: <em>"your domain's credentials appeared in a stealer log on this forum."</em></p>
@@ -33,47 +33,47 @@
 
 <hr />
 <h2>The problem: the dark web is loud</h2>
-<p>Dark-web monitoring sounds simple — search for your company's domain, alert if it shows up. In reality it's a signal-to-noise nightmare. A single domain can match thousands of darknet records: stealer logs, breach dumps, market listings, forum chatter, paste sites. The <em>same</em> leak gets reposted across forums for months. And most matches are <strong>incidental</strong> — your domain mentioned in passing, not actually compromised.</p>
+<p>Dark-web monitoring sounds simple, search for your company's domain, alert if it shows up. In reality it's a signal-to-noise nightmare. A single domain can match thousands of darknet records: stealer logs, breach dumps, market listings, forum chatter, paste sites. The <em>same</em> leak gets reposted across forums for months. And most matches are <strong>incidental</strong>, your domain mentioned in passing, not actually compromised.</p>
 <p>The hard questions are:
 1. Is this the <em>same</em> finding I already saw, just reposted? (<strong>deduplication</strong>)
-2. Does this domain appearing here actually mean <em>this company</em> is exposed — or is it a customer's email on someone else's breached service, or pure noise? (<strong>role classification</strong>)
+2. Does this domain appearing here actually mean <em>this company</em> is exposed, or is it a customer's email on someone else's breached service, or pure noise? (<strong>role classification</strong>)
 3. Is it worth waking someone up over? (<strong>risk + false-positive filtering</strong>)</p>
 <p>This pipeline answers all three before anything reaches a customer.</p>
 <h2>Architecture</h2>
 <p><img alt="Dark-owl pipeline architecture" src="diagrams/do-architecture.png" /></p>
-<p>Five stages — <strong>Ingest → Dedup &amp; Enrich → LLM Review → Issue → Notify</strong> — take raw darknet matches and turn them into precise, customer-ready alerts.</p>
-<h3>Stage 1 — Ingest from the darknet</h3>
-<p>A <strong>DarkOwl</strong> API client authenticates with <strong>HMAC-SHA1</strong> (public/private key signing) over a proxy, and runs four query types per customer domain — <code>email</code>, <code>emaildomain</code>, <code>domain</code>, and <code>website_mention</code> — plus optional per-tenant <code>keyword</code> scans. It batches 20 domains per request, paginates results, and filters below a "hackishness" score threshold. Raw findings land in BigQuery (prod) or DuckDB (local) via <strong>dlt</strong>, append-only with schema evolution.</p>
-<h3>Stage 2 — Deduplication: the noise problem</h3>
-<p>This is the engineering core. One real finding arrives as many rows — across query types and reposts. Three focused modules collapse that down:</p>
+<p>Five stages, <strong>Ingest → Dedup &amp; Enrich → LLM Review → Issue → Notify</strong>, take raw darknet matches and turn them into precise, customer-ready alerts.</p>
+<h3>Stage 1, Ingest from the darknet</h3>
+<p>A <strong>DarkOwl</strong> API client authenticates with <strong>HMAC-SHA1</strong> (public/private key signing) over a proxy, and runs four query types per customer domain, <code>email</code>, <code>emaildomain</code>, <code>domain</code>, and <code>website_mention</code>, plus optional per-tenant <code>keyword</code> scans. It batches 20 domains per request, paginates results, and filters below a "hackishness" score threshold. Raw findings land in BigQuery (prod) or DuckDB (local) via <strong>dlt</strong>, append-only with schema evolution.</p>
+<h3>Stage 2, Deduplication: the noise problem</h3>
+<p>This is the engineering core. One real finding arrives as many rows, across query types and reposts. Three focused modules collapse that down:</p>
 <p><img alt="Deduplication and identity logic" src="diagrams/do-dedup.png" /></p>
 <ul>
-<li><strong><code>domain_matching.py</code></strong> normalizes hosts (strips scheme, port, path), extracts the <code>&lt;em&gt;</code>-highlighted match terms from the result body, and confirms a true match — exact domain <em>or</em> subdomain — so a domain is only ever linked to a finding that genuinely mentions it.</li>
-<li><strong><code>finding_identity.py</code></strong> assigns each finding a stable <strong><code>finding_id = UUID5(result_id | domain)</code></strong>, then applies <strong>query precedence</strong> (<code>email &gt; emaildomain &gt; domain &gt; website_mention &gt; keyword</code>) to pick a single <em>canonical</em> row when duplicates collide — keeping the highest-confidence evidence source.</li>
+<li><strong><code>domain_matching.py</code></strong> normalizes hosts (strips scheme, port, path), extracts the <code>&lt;em&gt;</code>-highlighted match terms from the result body, and confirms a true match, exact domain <em>or</em> subdomain, so a domain is only ever linked to a finding that genuinely mentions it.</li>
+<li><strong><code>finding_identity.py</code></strong> assigns each finding a stable <strong><code>finding_id = UUID5(result_id | domain)</code></strong>, then applies <strong>query precedence</strong> (<code>email &gt; emaildomain &gt; domain &gt; website_mention &gt; keyword</code>) to pick a single <em>canonical</em> row when duplicates collide, keeping the highest-confidence evidence source.</li>
 <li><strong><code>body_extract.py</code></strong> pulls a 500-character window around the matched-domain mention, producing a tight <strong>evidence snippet</strong> instead of a wall of crawled text.</li>
 </ul>
 <p>Two further passes remove exact duplicates and <em>fuzzy</em> reposts (same content resurfacing on different dates), then group related findings into <strong>leaks</strong>. By the time data leaves this stage, thousands of raw rows have become a handful of canonical, evidence-backed findings.</p>
-<h3>Stage 3 — LLM review: role-aware triage</h3>
+<h3>Stage 3, LLM review: role-aware triage</h3>
 <p>Deduplication tells you <em>what's unique</em>; it can't tell you <em>what it means</em>. That's the LLM's job.</p>
 <p><img alt="Gemini role-aware review" src="diagrams/do-llm.png" /></p>
-<p>Each finding is routed to a <strong>role-specific Gemini 2.5 Flash prompt</strong> based on its type — stealer log, data breach, dark-web mention, or market listing. The model returns a <strong>structured JSON verdict</strong>:</p>
+<p>Each finding is routed to a <strong>role-specific Gemini 2.5 Flash prompt</strong> based on its type, stealer log, data breach, dark-web mention, or market listing. The model returns a <strong>structured JSON verdict</strong>:</p>
 <ul>
-<li><code>is_false_positive</code> — drop incidental noise.</li>
-<li><code>matched_domain_role</code> — the key insight: is the domain the <strong>subject</strong> (first-party compromise), a <strong>victim</strong>, a <strong>service_provider</strong> (a customer's account <em>on</em> this domain), a <strong>listing</strong> (the domain itself being sold), or <strong>incidental</strong>? That distinction determines whether and how a customer is alerted.</li>
+<li><code>is_false_positive</code>, drop incidental noise.</li>
+<li><code>matched_domain_role</code>, the key insight: is the domain the <strong>subject</strong> (first-party compromise), a <strong>victim</strong>, a <strong>service_provider</strong> (a customer's account <em>on</em> this domain), a <strong>listing</strong> (the domain itself being sold), or <strong>incidental</strong>? That distinction determines whether and how a customer is alerted.</li>
 <li><code>risk_level</code>, <code>confidence</code>, and a plain-English <code>user_summary</code> ready to drop into an alert.</li>
 </ul>
 <p>It runs deterministically (temperature 0, fixed seed, JSON-enforced) across 8 parallel workers with exponential-backoff retries. This role-classification step is what turns a noisy keyword match into an <em>accurate</em> exposure verdict.</p>
-<h3>Stages 4 &amp; 5 — Issue creation and real-time notification</h3>
-<p>Confirmed findings become <strong>issues</strong>: evidence payloads are uploaded to <strong>GCS</strong>, and a record is upserted into the issue store. The final asset publishes a compact message — <code>{leak_id, workspace_id, entity_id}</code> — to <strong>Google Cloud Pub/Sub</strong>, where downstream services pick it up and alert the affected organization in near-real-time. Decoupling detection from delivery via Pub/Sub means alerting can scale and evolve independently of the pipeline.</p>
+<h3>Stages 4 &amp; 5, Issue creation and real-time notification</h3>
+<p>Confirmed findings become <strong>issues</strong>: evidence payloads are uploaded to <strong>GCS</strong>, and a record is upserted into the issue store. The final asset publishes a compact message, <code>{leak_id, workspace_id, entity_id}</code>, to <strong>Google Cloud Pub/Sub</strong>, where downstream services pick it up and alert the affected organization in near-real-time. Decoupling detection from delivery via Pub/Sub means alerting can scale and evolve independently of the pipeline.</p>
 <h2>Orchestration</h2>
 <p>Built on <strong>Dagster</strong>, the seven assets run as a daily dependency chain at 01:00 UTC, with a separate <strong>90-day backfill job</strong> at 04:00 for onboarding new customers and historical sweeps. A <code>run_id</code> is threaded through every asset for full lineage and reproducibility, and <code>tenacity</code>-based backoff makes the external API calls resilient.</p>
 <h2>What this project demonstrates</h2>
 <ul>
-<li><strong>Hard deduplication &amp; entity-resolution logic</strong> — stable identity hashing, source-precedence resolution, normalization, and fuzzy-repost detection over genuinely messy real-world data.</li>
-<li><strong>LLM as a precision classifier</strong> — role-aware, structured-output review that turns noisy matches into accurate, low-false-positive verdicts, with prompt routing per finding type.</li>
-<li><strong>Secure external integration</strong> — HMAC-signed, proxied API access with batching, pagination, and rate-limit handling.</li>
-<li><strong>Event-driven architecture</strong> — GCS evidence storage plus Pub/Sub fan-out, cleanly decoupling detection from customer alerting.</li>
-<li><strong>Multi-environment data engineering</strong> — dlt with DuckDB locally and BigQuery + Postgres + GCS in production, all behind one config flag.</li>
+<li><strong>Hard deduplication &amp; entity-resolution logic</strong>, stable identity hashing, source-precedence resolution, normalization, and fuzzy-repost detection over genuinely messy real-world data.</li>
+<li><strong>LLM as a precision classifier</strong>, role-aware, structured-output review that turns noisy matches into accurate, low-false-positive verdicts, with prompt routing per finding type.</li>
+<li><strong>Secure external integration</strong>, HMAC-signed, proxied API access with batching, pagination, and rate-limit handling.</li>
+<li><strong>Event-driven architecture</strong>, GCS evidence storage plus Pub/Sub fan-out, cleanly decoupling detection from customer alerting.</li>
+<li><strong>Multi-environment data engineering</strong>, dlt with DuckDB locally and BigQuery + Postgres + GCS in production, all behind one config flag.</li>
 </ul>
 <hr />
 <p><em>Tech stack: Python 3.12 · Dagster 1.13 · dlt 1.21 (BigQuery/DuckDB) · google-genai (Gemini 2.5 Flash) · SQLAlchemy 2.0 · Google Cloud Storage · Cloud Pub/Sub · tenacity · uv.</em></p>

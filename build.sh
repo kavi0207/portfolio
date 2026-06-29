@@ -62,7 +62,7 @@ def stats_to_list(text):
         def clean(s):
             for k,v in und.items(): s=s.replace(k,v)
             return s.strip()
-        return "\n".join(f"- **{clean(n)}** — {clean(l)}" for n,l in items) + "\n"
+        return "\n".join(f"- **{clean(n)}**, {clean(l)}" for n,l in items) + "\n"
     return re.sub(r'<div class="stats">\n(.*?)\n</div>', repl, text, flags=re.S)
 def inline_imgs(text):
     return re.sub(r'!\[([^\]]*)\]\((diagrams/[^)]+)\)',

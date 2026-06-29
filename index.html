@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Security Data Engineer — Portfolio</title>
-<meta name="description" content="Security data engineer building production pipelines across cyber threat intelligence, vulnerability management, and posture management (cryptographic / PQC and AI agents) — with pragmatic, auditable LLM enrichment." />
+<title>Security Data Engineer Portfolio</title>
+<meta name="description" content="Security data engineer building production pipelines across cyber threat intelligence, vulnerability management, and posture management (cryptographic / PQC and AI agents), with targeted, verifiable use of AI." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -30,8 +30,9 @@
     <h1>I turn raw security data into decisions.</h1>
     <p class="lead">
       I design and ship production data systems across <strong>cyber threat intelligence</strong>,
-      <strong>vulnerability management</strong>, and <strong>posture management</strong> —
-      pairing classic data engineering with pragmatic, auditable LLM enrichment.
+      <strong>vulnerability management</strong>, and <strong>posture management</strong>.
+      I build the core data pipelines, and bring in AI only where it adds value, keeping every
+      AI-generated result traceable and verifiable.
     </p>
     <div class="cta">
       <a class="btn primary" href="#cti">View my work</a>
@@ -53,26 +54,26 @@
       <a class="domain" href="#vm">
         <span class="n">02</span>
         <h4>Vulnerability Management</h4>
-        <p>Threat-informed risk scoring &amp; patch prioritization.</p>
+        <p>Threat-informed risk scoring and patch prioritization.</p>
         <span class="count">1 project →</span>
       </a>
       <a class="domain" href="#posture">
         <span class="n">03</span>
         <h4>Posture Management</h4>
-        <p>Cryptographic (PQC) &amp; AI-agent (AI-SPM) security posture.</p>
+        <p>Cryptographic (PQC) and AI-agent (AI-SPM) security posture.</p>
         <span class="count">3 projects →</span>
       </a>
     </div>
   </div>
 </header>
 
-<!-- ============ BUCKET 1 — CTI ============ -->
+<!-- BUCKET 1 / CTI -->
 <section id="cti" class="domain-section">
   <div class="wrap">
     <div class="cat">
       <span class="cat-label">01 · Cyber Threat Intelligence</span>
       <h2 class="cat-title">Knowing who and what is coming</h2>
-      <p class="cat-desc">External threat data — breach activity, dark-web exposure, and the quantum threat landscape — turned into structured, trustworthy intelligence.</p>
+      <p class="cat-desc">External threat data (breach activity, dark-web exposure, and the quantum threat landscape), turned into structured, trustworthy intelligence.</p>
     </div>
     <div class="grid">
 
@@ -85,9 +86,9 @@
         </div>
         <div class="tile-body">
           <span class="kicker">Breach Intelligence</span>
-          <h3>Messy Breach Reports → Clean Intelligence</h3>
+          <h3>Messy Breach Reports into Clean Intelligence</h3>
           <p class="usecase">“Who got breached, in what industry, by which actor?”</p>
-          <p>A bronze→silver→gold medallion pipeline that crawls breach sources, uses LLM agents to verify the victim and classify industry, deduplicates across sources, and normalizes into a query-friendly Postgres graph.</p>
+          <p>A bronze, silver, gold medallion pipeline that crawls breach sources, uses LLM agents to verify the victim and classify industry, deduplicates across sources, and normalizes into a query-friendly Postgres graph.</p>
           <span class="card-stat">~1,000 events/mo · ~92% match precision</span>
           <div class="chips">
             <span class="chip">Dagster</span><span class="chip">Scrapy</span><span class="chip">dlt</span>
@@ -133,15 +134,15 @@
         <div class="tile-body">
           <span class="kicker">Quantum / PQC Threat Intel</span>
           <h3>Quantum Security Threat Intelligence</h3>
-          <p class="usecase">“What is the real quantum threat — today vs. future?”</p>
-          <p>A sourced threat register separating <em>future</em> cryptanalytic risk (Shor/Grover) from the <em>live</em> migration-era attack surface (PQC side-channels, downgrade attacks, harvest-now-decrypt-later) — capability-framed, never fear-sold. Published as analyst briefings.</p>
+          <p class="usecase">“What is the real quantum threat, today vs. future?”</p>
+          <p>A sourced threat register separating <em>future</em> cryptanalytic risk (Shor/Grover) from the <em>live</em> migration-era attack surface (PQC side-channels, downgrade attacks, harvest-now-decrypt-later). Capability-framed, never fear-sold, and published as analyst briefings.</p>
           <span class="card-stat">Capability-over-attribution register</span>
           <div class="chips">
             <span class="chip">Threat Intelligence</span><span class="chip">Post-Quantum</span>
             <span class="chip">HNDL</span><span class="chip">NIST PQC</span>
           </div>
           <div class="card-links">
-            <span class="pdf">Briefing — available on request</span>
+            <span class="pdf">Briefing available on request</span>
           </div>
         </div>
       </article>
@@ -150,13 +151,13 @@
   </div>
 </section>
 
-<!-- ============ BUCKET 2 — VULN MGMT ============ -->
+<!-- BUCKET 2 / VULN MGMT -->
 <section id="vm" class="domain-section alt">
   <div class="wrap">
     <div class="cat">
       <span class="cat-label">02 · Risk-Based Vulnerability Management</span>
       <h2 class="cat-title">Deciding what to fix first</h2>
-      <p class="cat-desc">Threat-informed prioritization — collapsing a flood of vulnerabilities into the few that demand action now.</p>
+      <p class="cat-desc">Threat-informed prioritization that collapses a flood of vulnerabilities into the few that demand action now.</p>
     </div>
     <div class="grid">
 
@@ -165,14 +166,14 @@
           <span class="stage">12+ feeds</span><span class="arrow">→</span>
           <span class="stage">Enrich</span><span class="arrow">→</span>
           <span class="stage">LLM gap-fill</span><span class="arrow">→</span>
-          <span class="stage">0–100 score</span>
+          <span class="stage">0&ndash;100 score</span>
         </div>
         <div class="tile-body">
           <span class="kicker">Risk Scoring · Patch Triage</span>
           <h3>Scoring Every Known Vulnerability</h3>
           <p class="usecase">“Which of ~270k known CVEs should I patch first?”</p>
-          <p>Fuses 12+ authoritative feeds — NVD, EPSS, CISA KEV, MITRE ATT&amp;CK, ThreatFox and more — into a single evidence-backed 0–100 risk score per CVE, refreshed daily, with surgical LLM gap-filling, and mapped to OCSF for SIEM/data-lake interoperability.</p>
-          <span class="card-stat">280K CVEs → ~1,500 to patch now</span>
+          <p>Fuses 12+ authoritative feeds (NVD, EPSS, CISA KEV, MITRE ATT&amp;CK, ThreatFox and more) into a single evidence-backed 0&ndash;100 risk score per CVE, refreshed daily, with surgical LLM gap-filling, and mapped to OCSF for SIEM and data-lake interoperability.</p>
+          <span class="card-stat">280K CVEs into ~1,500 to patch now</span>
           <div class="chips">
             <span class="chip">Dagster</span><span class="chip">PostgreSQL</span><span class="chip">SQLAlchemy async</span>
             <span class="chip">Claude · Vertex</span><span class="chip">OCSF</span>
@@ -188,13 +189,13 @@
   </div>
 </section>
 
-<!-- ============ BUCKET 3 — POSTURE MANAGEMENT (PQC + AI-SPM) ============ -->
+<!-- BUCKET 3 / POSTURE MANAGEMENT (PQC + AI-SPM) -->
 <section id="posture" class="domain-section">
   <div class="wrap">
     <div class="cat">
       <span class="cat-label">03 · Posture Management</span>
       <h2 class="cat-title">Knowing your exposure before anyone attacks it</h2>
-      <p class="cat-desc">One repeatable loop — discover → assess → score → track — applied across domains. Today: <strong>cryptographic posture (PQC / CPM)</strong>. Next: <strong>AI-agent posture (AI-SPM)</strong> — the log source incumbent tools don’t yet cover.</p>
+      <p class="cat-desc">One repeatable loop (discover → assess → score → track) applied across domains. Today: <strong>cryptographic posture (PQC / CPM)</strong>. Next: <strong>AI-agent posture (AI-SPM)</strong>, the log source incumbent tools don’t yet cover.</p>
     </div>
     <div class="grid">
 
@@ -208,16 +209,16 @@
         </div>
         <div class="tile-body">
           <span class="kicker">Cryptographic Posture · PQC</span>
-          <h3>External PQC Discovery &amp; Posture Maps</h3>
-          <p class="usecase">“What cryptography is this org exposing — and is it PQC-ready?”</p>
+          <h3>External PQC Discovery and Posture Maps</h3>
+          <p class="usecase">“What cryptography is this org exposing, and is it PQC-ready?”</p>
           <p>A Rust scanner (core / discovery / DNS / PQC crates) that fingerprints an organization’s externally-observable cryptography, builds a CBOM-style posture, and renders cross-org posture maps showing concentration and crypto-agility gaps.</p>
-          <span class="card-stat">Outside-in crypto discovery → CBOM</span>
+          <span class="card-stat">Outside-in crypto discovery into a CBOM</span>
           <div class="chips">
             <span class="chip">Rust</span><span class="chip">DNS / TLS</span><span class="chip">CBOM</span>
             <span class="chip">Crypto-agility</span>
           </div>
           <div class="card-links">
-            <span class="pdf">Posture-map preview — available on request</span>
+            <span class="pdf">Posture-map preview available on request</span>
           </div>
         </div>
       </article>
@@ -234,14 +235,14 @@
           <span class="kicker">Cryptographic Posture · PQC</span>
           <h3>Sector PQC-Readiness Reports</h3>
           <p class="usecase">“How does a whole sector stand on the migration clock?”</p>
-          <p>Automated, repeatable readiness benchmarks across sectors (banking, insurance, payments, public) and countries — scanning large organization populations, scoring posture, and generating publication-grade reports with cross-org comparison.</p>
-          <span class="card-stat">Multi-sector · multi-country benchmarks</span>
+          <p>Automated, repeatable readiness benchmarks across sectors (banking, insurance, payments, public) and countries, scanning large organization populations, scoring posture, and generating publication-grade reports with cross-org comparison.</p>
+          <span class="card-stat">Multi-sector, multi-country benchmarks</span>
           <div class="chips">
             <span class="chip">Python</span><span class="chip">Benchmarking</span>
             <span class="chip">Sector analysis</span><span class="chip">Reporting</span>
           </div>
           <div class="card-links">
-            <span class="pdf">Payments sector report — available on request</span>
+            <span class="pdf">Payments sector report available on request</span>
           </div>
         </div>
       </article>
@@ -256,9 +257,9 @@
         </div>
         <div class="tile-body">
           <span class="kicker">AI Security Posture · AI-SPM <span class="badge">In progress</span></span>
-          <h3>AI-Agent Visibility &amp; Posture</h3>
+          <h3>AI-Agent Visibility and Posture</h3>
           <p class="usecase">“Which AI agents do we run, who owns them, and what can they reach?”</p>
-          <p>Instrument MCP-exposed agents with OpenTelemetry GenAI, build an agent inventory and ownership graph, generate an AI-BOM, assess over-permissioned access, and establish representation-learning behavioral baselines for posture drift — the agent-visibility layer incumbent tools miss.</p>
+          <p>Instrument MCP-exposed agents with OpenTelemetry GenAI, build an agent inventory and ownership graph, generate an AI-BOM, assess over-permissioned access, and establish representation-learning behavioral baselines for posture drift. This is the agent-visibility layer incumbent tools miss.</p>
           <span class="card-stat">The agent-posture layer vendors are missing</span>
           <div class="chips">
             <span class="chip">OpenTelemetry GenAI</span><span class="chip">MCP</span><span class="chip">AI-BOM</span>
@@ -276,14 +277,14 @@
   <div class="wrap">
     <div class="section-head">
       <h2>What I work with</h2>
-      <p>The stack behind these systems — across threat intelligence, vulnerability management, and posture management.</p>
+      <p>The stack behind these systems, across threat intelligence, vulnerability management, and posture management.</p>
     </div>
     <div class="skill-grid">
       <div>
         <h4>Orchestration &amp; Pipelines</h4>
         <ul>
           <li>Dagster (assets, sensors, schedules)</li>
-          <li>dlt — data load tool</li>
+          <li>dlt (data load tool)</li>
           <li>Medallion architecture</li>
           <li>Scrapy crawling</li>
         </ul>

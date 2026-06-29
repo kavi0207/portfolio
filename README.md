@@ -1,4 +1,4 @@
-# Cyber Threat-Intelligence Data Pipelines — Portfolio
+# Cyber Threat-Intelligence Data Pipelines, Portfolio
 
 Three production-grade **data pipelines** I built inside a Python monorepo, each solving a distinct cybersecurity problem. Common backbone: **Python 3.12 · Dagster orchestration · dlt + SQLAlchemy · BigQuery/PostgreSQL · LLM enrichment**.
 
@@ -12,10 +12,10 @@ Each write-up opens with a rendered architecture diagram and is written from a d
 
 ## Themes across all three
 
-- **Multi-source data integration** — REST APIs, CSV/STIX/XML feeds, web crawling, and a darknet API, each with bespoke incremental-sync, retry, and rate-limit logic.
-- **Dagster asset graphs** — dependency-aware scheduling, sensors, retry policies, and containerized gRPC deployment.
-- **Pragmatic LLM use** — Claude and Gemini applied *surgically* (gap-filling, entity validation, role classification) with structured output, batching, caching, and full auditability — never as a black box.
-- **Clean serving layers** — normalized PostgreSQL schemas designed so the questions security teams actually ask become simple queries.
+- **Multi-source data integration**, REST APIs, CSV/STIX/XML feeds, web crawling, and a darknet API, each with bespoke incremental-sync, retry, and rate-limit logic.
+- **Dagster asset graphs**, dependency-aware scheduling, sensors, retry policies, and containerized gRPC deployment.
+- **Pragmatic LLM use**, Claude and Gemini applied *surgically* (gap-filling, entity validation, role classification) with structured output, batching, caching, and full auditability, never as a black box.
+- **Clean serving layers**, normalized PostgreSQL schemas designed so the questions security teams actually ask become simple queries.
 
 ## Diagrams
 
